@@ -21,41 +21,52 @@ let rotation = () => {
 }
 
 let enemy_deploy = () => {
-    let rand_orient = Math.floor(Math.random() * 2);
     let e_ships = 0;
 
-    if(rand_orient>0)
+    while(!(e_ships===3))
     {
-
-        while(!(e_ships===2))
+        let rand_orient = Math.floor(Math.random() * 2);
+            if(rand_orient>0)
         {
-            let rand_num = Math.floor(Math.random() * 4) +1;
-            let rand_line = Math.floor(Math.random() * 5);
+                let rand_num = Math.floor(Math.random() * 4) +1;
+                let rand_line = Math.floor(Math.random() * 5);
+                
+                console.log(rand_num);
+
+                let id = '#f' + chars[rand_line] + rand_num;
+                rand_num++;
+                let next_id = '#f' + chars[rand_line] + rand_num;
+
+                let element = document.querySelector(id);
+                let element2 = document.querySelector(next_id);
+
+                if(!(element.classList.contains('deployed')) && !(element2.classList.contains('deployed')))
+                {
+                    element.classList.add('deployed');
+                    element2.classList.add('deployed');
+                    e_ships++;
+                }
             
-            console.log(rand_num);
-
-            let id = '#f' + chars[rand_line] + rand_num;
-            rand_num++;
-            let next_id = '#f' + chars[rand_line] + rand_num;
-
-            let element = document.querySelector(id);
-            let element2 = document.querySelector(next_id);
-
-            if(!(element.classList.contains('deployed')) && !(element2.classList.contains('deployed')))
-            {
-                element.classList.add('deployed');
-                element2.classList.add('deployed');
-                e_ships++;
-            }
         }
-        
+        else {
+                let rand_num = Math.floor(Math.random() * 5) +1;
+                let rand_line = Math.floor(Math.random() * 4);
 
-        
+                let id = '#f' + chars[rand_line] + rand_num;
+                rand_line++;
+                let next_id = '#f' + chars[rand_line] + rand_num;
+
+                let element = document.querySelector(id);
+                let element2 = document.querySelector(next_id);
+
+                if(!(element.classList.contains('deployed')) && !(element2.classList.contains('deployed')))
+                {
+                    element.classList.add('deployed');
+                    element2.classList.add('deployed');
+                    e_ships++;
+                }
+        }
     }
-    else {
-
-    }
-
 }
 
 let deploy = (event) => {
