@@ -1,4 +1,5 @@
 let ship2 = document.querySelector('#ship2');
+let start = document.querySelector('#start');
 let cells = document.querySelectorAll('.cell');
 
 let orient = true;
@@ -7,7 +8,7 @@ let chars = ['a','b','c','d','e'];
 
 let rotation = () => {
 
-    
+
     if(orient)
     {
         orient = false;
@@ -15,6 +16,44 @@ let rotation = () => {
     else
     {
         orient = true;
+    }
+
+}
+
+let enemy_deploy = () => {
+    let rand_orient = Math.floor(Math.random() * 2);
+    let e_ships = 0;
+
+    if(rand_orient>0)
+    {
+
+        while(!(e_ships===2))
+        {
+            let rand_num = Math.floor(Math.random() * 4) +1;
+            let rand_line = Math.floor(Math.random() * 5);
+            
+            console.log(rand_num);
+
+            let id = '#f' + chars[rand_line] + rand_num;
+            rand_num++;
+            let next_id = '#f' + chars[rand_line] + rand_num;
+
+            let element = document.querySelector(id);
+            let element2 = document.querySelector(next_id);
+
+            if(!(element.classList.contains('deployed')) && !(element2.classList.contains('deployed')))
+            {
+                element.classList.add('deployed');
+                element2.classList.add('deployed');
+                e_ships++;
+            }
+        }
+        
+
+        
+    }
+    else {
+
     }
 
 }
@@ -58,11 +97,6 @@ let deploy = (event) => {
         event.currentTarget.classList.add('deployed');
     }
     }
-
-    
-
-    
-
 }
 
 let hover = (event) => {
@@ -197,4 +231,5 @@ let pickship = () => {
     }
 
 document.addEventListener('wheel', rotation);
+start.addEventListener('click', enemy_deploy);
 ship2.addEventListener('click', pickship);
