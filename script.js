@@ -1,8 +1,11 @@
 let ship2 = document.querySelector('#ship2');
 let start = document.querySelector('#start');
 let cells = document.querySelectorAll('.cell');
+let e_cells = document.querySelectorAll('.e_cell');
 
 let orient = true;
+let e_points=6;
+let points=6;
 
 let chars = ['a','b','c','d','e'];
 
@@ -20,7 +23,66 @@ let rotation = () => {
 
 }
 
+let e_shoot = () => {
+    let rand_num = Math.floor(Math.random() * 5) +1;
+    let rand_line = Math.floor(Math.random() * 5);
+
+    let id = '#' + chars[rand_line] + rand_num;
+
+    let element = document.querySelector(id);
+
+    if(element.classList.contains('deployed'))
+    {
+        element.classList.remove('deployed');
+        
+        element.classList.add('shot_down');
+        points--;
+        if(points===0)
+        {
+            document.querySelector('#header').innerHTML = 'You Lost!';
+        }
+    }
+    else if(element.classList.contains('missed') || element.classList.contains('shot_down'))
+    {
+        e_shoot();
+    }
+    else 
+    {
+        element.classList.add('missed');
+    }
+}
+
+let shoot = (event) => {
+     if(event.currentTarget.classList.contains('e_deployed'))
+     {
+        event.currentTarget.classList.remove('e_deployed');
+        event.currentTarget.removeEventListener('click', shoot);
+        event.currentTarget.classList.add('shot_down');
+        e_points--;
+        if(e_points===0)
+        {
+            document.querySelector('#header').innerHTML = 'You Win!';
+        }
+        else
+        {
+            e_shoot();
+        }
+        
+     }
+     else
+     {
+        event.currentTarget.classList.add('missed');
+        e_shoot();
+     }
+}
+
 let enemy_deploy = () => {
+
+    for (let cell of cells) {
+        cell.removeEventListener('mouseover', hover);
+        cell.removeEventListener('mouseout', unhover);
+        cell.removeEventListener('click', deploy);
+    }
     let e_ships = 0;
 
     while(!(e_ships===3))
@@ -40,10 +102,10 @@ let enemy_deploy = () => {
                 let element = document.querySelector(id);
                 let element2 = document.querySelector(next_id);
 
-                if(!(element.classList.contains('deployed')) && !(element2.classList.contains('deployed')))
+                if(!(element.classList.contains('e_deployed')) && !(element2.classList.contains('e_deployed')))
                 {
-                    element.classList.add('deployed');
-                    element2.classList.add('deployed');
+                    element.classList.add('e_deployed');
+                    element2.classList.add('e_deployed');
                     e_ships++;
                 }
             
@@ -61,8 +123,8 @@ let enemy_deploy = () => {
 
                 if(!(element.classList.contains('deployed')) && !(element2.classList.contains('deployed')))
                 {
-                    element.classList.add('deployed');
-                    element2.classList.add('deployed');
+                    element.classList.add('e_deployed');
+                    element2.classList.add('e_deployed');
                     e_ships++;
                 }
         }
@@ -230,15 +292,16 @@ let pickship = () => {
 
     for (let cell of cells) {
         cell.classList.add('cell_planning');
-    }
-
-    
+    }  
 }
 
     for (let cell of cells) {
         cell.addEventListener('mouseover', hover);
         cell.addEventListener('mouseout', unhover);
         cell.addEventListener('click', deploy);
+    }
+    for (let e_cell of e_cells) {
+        e_cell.addEventListener('click', shoot);
     }
 
 document.addEventListener('wheel', rotation);
